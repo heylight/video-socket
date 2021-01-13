@@ -9,8 +9,9 @@
     <img id="canvas" width="320" height="320" />
   </body>
   <script>
+    var hostname = location.hostname;
     var canvas = document.querySelector("#canvas");
-    var w = new WebSocket("ws://localhost:8788/");
+    var w = new WebSocket("ws://" + hostname + ":8788/");
     w.onmessage = function (e) {
       canvas.src = e.data;
     };

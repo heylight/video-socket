@@ -20,6 +20,7 @@
     canvas.width = 320;
     canvas.height = 320;
     var context = canvas.getContext("2d");
+    var hostname = location.hostname;
     var w;
     if (navigator.mediaDevices) {
       navigator.mediaDevices
@@ -29,7 +30,7 @@
           video.onloadedmetadata = function (e) {
             video.play();
           };
-          w = new WebSocket("ws://localhost:8788");
+          w = new WebSocket("ws://" + hostname + ":8788/");
           w.onopen = function () {
             console.log("hello!");
             sendImg();
