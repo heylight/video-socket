@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <video
+      id="video"
+      width="640"
+      height="480"
+      style="background: #000"
+      autoplay
+    ></video>
+  </body>
+  <script>
+    var video = document.getElementById("video");
+    var canvas = document.createElement("canvas");
+    canvas.width = 320;
+    canvas.height = 320;
+    var context = canvas.getContext("2d");
+    var w;
+    if (navigator.mediaDevices) {
+      navigator.mediaDevices
+        .getUserMedia({ video: { width: 320, height: 320 } })
+        .then((mediaStream) => {
+          video.srcObject = mediaStream;
+          video.onloadedmetadata = function (e) {
+            video.play();
+          };
+          w = new WebSocket("ws://localhost:8788");
+          w.onopen = function () {
+            console.log("hello!");
+            sendImg();
+          };
+          w.onmessage = function (e) {
+            sendImg();
+          };
+        });
+      function sendImg() {
+        context.drawImage(video, 0, 0, 320, 320);
+        var imgData = canvas.toDataURL();
+        w.send(imgData);
+      }
+    }
+  </script>
+</html>
